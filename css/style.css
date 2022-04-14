@@ -19,6 +19,7 @@ body {
     position: fixed;
     top: 0;
     left: 0;
+    z-index: 1;
     background: #ffffff;
 }
 
@@ -41,20 +42,28 @@ body {
     position: fixed;
     bottom: 0;
     left: 0;
+    z-index: 1;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    /* align-items: center; */
     background: #ffffff;
 }
 
-input{
+.bottom > div {
     width: calc(100% - 75px);
+    margin: 15px 0 1px 17px;
+}
+
+.bottom input{
+    font-family: 'Roboto', sans-serif;
+    width: 100%;
     height: 30px;
     border: none;
-    margin: 25px 0 25px 17px;
+    padding: 0;
+    /* margin: 25px 0 25px 17px; */
 }
 
-::-webkit-input-placeholder { /* Edge */
+.bottom input::-webkit-input-placeholder { /* Edge */
     font-family: 'Roboto', sans-serif;
     font-style: italic;
     font-weight: 400;
@@ -63,7 +72,7 @@ input{
     color: #000000;
 }
 
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
+.bottom input:-ms-input-placeholder { /* Internet Explorer 10-11 */
     font-family: 'Roboto', sans-serif;
     font-style: italic;
     font-weight: 400;
@@ -72,7 +81,7 @@ input{
     color: #000000;
 }
 
-::placeholder{
+.bottom input::placeholder{
     font-family: 'Roboto', sans-serif;
     font-style: italic;
     font-weight: 400;
@@ -85,6 +94,13 @@ input:focus {
     outline: none;
 }
 
+.bottom h6 {
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+    color: #000000;
+}
+
 .bottom > ion-icon {
     font-size: 30px;
     margin: 27px 18px 27px 0;
@@ -95,6 +111,158 @@ input:focus {
     height: 100%;
     margin: 106px 0 84px;
     /* background-color: red; apagar */
+}
+
+.opcoes {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2;
+}
+
+.tela-preta {
+    /* width: calc(100% - 259px); */
+    width: 30.92%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.menu-lateral {
+    /* width: calc(100% - 116px); */
+    width: 69.08%;
+    height: 100%;
+    background: #ffffff;
+}
+
+.menu-lateral h6:first-child {
+    /* width: 66%; */
+    max-width: 170.973px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+    margin: 23px auto;
+}
+
+.texto-visibilidade {
+    width: 100%; 
+    text-align: center;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+    margin: 23.5px auto;
+}
+
+.contatos {
+    width: 100%;
+    /* background: red; apagar */
+}
+
+.contato {
+    width: 100%;
+    height: 36px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 1px;
+    position: relative;
+    /* font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;    
+    color: #000000; */
+}
+
+.ion-icon-todos {
+    font-size: 25px;
+    color: #000000;
+    margin: 0 7.78px 0 17.78px;
+} 
+
+.ion-icon-usuario {
+    font-size: 25px;
+    color: #000000;
+    margin: 0 8.34px 0 20.34px;
+}
+
+.ion-icon-visibilidade {
+    font-size: 23px;
+    color: #000000;
+    margin: 0 8.34px 0 20.34px;
+}
+
+.texto-menu-lateral {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;    
+    color: #000000;
+}
+
+.contato > img {
+    width: 9px;
+    height: 7px;
+    position: absolute;
+    top: 13px;
+    right: 27px;
+    opacity: 0;
+}
+
+.tela-de-entrada {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #ffffff;
+}
+
+.tela-de-entrada > img {
+    width: 130px;
+    height: 92px;
+    /*max-width: 34.67%;*/
+    margin: 72px 0 94px;
+}
+
+.tela-de-entrada > input {
+    width: 69.6%;
+    height: 54px;
+    max-width: 261px;
+    border: 1px solid #d7d7d7;
+    border-radius: 4px;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 25px;
+    text-align: center;
+    color: #aeaeae;
+    margin-bottom: 15px;
+    padding: 0;
+}
+
+.tela-de-entrada > button {
+    width: 29.07%;
+    max-width: 109px;
+    height: 45px;
+    border: none;
+    border-radius: 9px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 25px;
+    text-align: center;
+    color: #696969;
+    background: #e7e7e7;
+    padding: 0;
+
 }
 
 .box {
@@ -131,4 +299,12 @@ span {
 .color-gray {
     font-weight: 400;
     color: #aaaaaa;
+}
+
+.selecionar > img{
+    opacity: 1;
+}
+
+.ocultar {
+    display: none;
 }

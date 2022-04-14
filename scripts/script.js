@@ -1,35 +1,41 @@
 let nameUser;
 let mensagens = [];
-let idManterConexao;
-let idBuscarMensagens;
+// let idManterConexao;
+// let idBuscarMensagens;
 entrarNaSala();
 
 function entrarNaSala() {
     nameUser = prompt("Qual é o seu nome?");
 
+    while (nameUser === "") {
+        alert("Entrada inválida! Digite um nome.");
+        nameUser = prompt("Qual é o seu nome?");
+    }
+    
     const name = {
         name: nameUser
     }
 
     const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/participants", name);
-    console.log("mandei");
+    //console.log("mandei");
     promise.then(tratarSucessoEnviarNome);
     promise.catch(tratarErroEnviarNome);
 }
 
 function tratarSucessoEnviarNome (response) {
     if (response.status === 200) {
-        console.log("entrei em tratar sucesso!");
+        console.log("o nome foi enviado com sucesso!");
         idManterConexao = setInterval(manterConexao, 4000);
         idBuscarMensagens = setInterval(buscarMensagens, 3000);
     }
 }
 
 function tratarErroEnviarNome(error) {
-    console.log(error);
+    //console.log(error);
     if(error.response.status === 400) {
-        alert(`O(a) ${nameUser} já está online! Digite outro nome.`);
-        window.location.reload();
+        alert(`Já existe um(a) usuário(a) online com o nome ${nameUser}! Digite outro nome.`);
+        // window.location.reload();
+        entrarNaSala();
     }
 }
 
@@ -39,9 +45,11 @@ function manterConexao() {
     }
 
     const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/status", name);
-    console.log("consegui mandar o post de manter conexão!");
+    promise.then(function () {
+        console.log("consegui manter a conexão!");
+    })
     promise.catch(function () {
-        alert("Você não está mais online! Se quiser continuar no chat, entre novamente.");
+        alert("Sua conexão caiu e você não está mais online! Se quiser continuar no chat, entre novamente.");
         // clearInterval(idManterConexao);
         // clearInterval(idBuscarMensagens);
         window.location.reload();
@@ -50,7 +58,7 @@ function manterConexao() {
 
 function buscarMensagens() {
     const promise = axios.get("https://mock-api.driven.com.br/api/v6/uol/messages");
-    console.log("consegui requisitar pra pegar as mensagens!");
+    //console.log("consegui requisitar pra pegar as mensagens!");
     promise.then(armazenarMensagens);
 }
 
@@ -101,14 +109,16 @@ function mensagemPublica(objetoMensagem) {
 }
 
 function mensagemParticular(objetoMensagem) {
-    const elemento = document.querySelector(".content");
-    const templateParticular = `
-        <div class="box reserved-message">
-            <p class="text-message"><span class="color-gray">(${objetoMensagem.time})</span> <span>${objetoMensagem.from}</span> reservadamente para <span>${objetoMensagem.to}</span>: ${objetoMensagem.text}</p>
-        </div>
-    `; 
-
-    elemento.innerHTML += templateParticular;
+    if((objetoMensagem.to === nameUser) || (objetoMensagem.to === "Todos") || (objetoMensagem.from === nameUser)) {
+        const elemento = document.querySelector(".content");
+        const templateParticular = `
+            <div class="box reserved-message">
+                <p class="text-message"><span class="color-gray">(${objetoMensagem.time})</span> <span>${objetoMensagem.from}</span> reservadamente para <span>${objetoMensagem.to}</span>: ${objetoMensagem.text}</p>
+            </div>
+        `; 
+    
+        elemento.innerHTML += templateParticular;
+    }
 }
 
 function rolarProFinal() {
@@ -129,10 +139,11 @@ function enviarMensagem() {
     const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages", mensagem)
     promise.then(function () {
         elemento.value = "";
-        buscarMensagens
+        buscarMensagens();
     });
     promise.catch(function () {
         alert("Você não está mais na sala, portanto, a página será recarregada!");
+        elemento.value = "";
         window.location.reload();
     })
 }
