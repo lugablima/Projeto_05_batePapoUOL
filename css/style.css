@@ -7,6 +7,7 @@ body {
     height: 100%;
     font-family: 'Roboto', sans-serif;
     background: #f3f3f3;
+    overflow-x: hidden;
 }
 
 .top {
@@ -135,6 +136,8 @@ input:focus {
     width: 69.08%;
     height: 100%;
     background: #ffffff;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 .menu-lateral h6:first-child {
@@ -149,7 +152,7 @@ input:focus {
 }
 
 .texto-visibilidade {
-    width: 100%; 
+    width: 100%;
     text-align: center;
     font-weight: 700;
     font-size: 16px;
@@ -158,12 +161,16 @@ input:focus {
     margin: 23.5px auto;
 }
 
-.contatos {
+.contatos, .contatos-dinamico {
     width: 100%;
     /* background: red; apagar */
 }
 
-.contato {
+.visibilidades {
+    width: 100%;
+}
+
+.contato, .visibilidade {
     width: 100%;
     height: 36px;
     display: flex;
@@ -173,7 +180,7 @@ input:focus {
     position: relative;
     /* font-weight: 400;
     font-size: 16px;
-    line-height: 19px;    
+    line-height: 19px;
     color: #000000; */
 }
 
@@ -181,7 +188,7 @@ input:focus {
     font-size: 25px;
     color: #000000;
     margin: 0 7.78px 0 17.78px;
-} 
+}
 
 .ion-icon-usuario {
     font-size: 25px;
@@ -198,11 +205,20 @@ input:focus {
 .texto-menu-lateral {
     font-weight: 400;
     font-size: 16px;
-    line-height: 19px;    
+    line-height: 19px;
     color: #000000;
 }
 
 .contato > img {
+    width: 9px;
+    height: 7px;
+    position: absolute;
+    top: 13px;
+    right: 27px;
+    opacity: 0;
+}
+
+.visibilidade > img {
     width: 9px;
     height: 7px;
     position: absolute;
@@ -270,7 +286,16 @@ input:focus {
     border-radius: 2px;
     padding: 13px 9px 13px 8px;
     margin-bottom: 4px;
+    /*overflow: hidden;*/
 }
+
+.box > p {
+    width: 100%;
+    line-break: normal;
+    word-break: break-all; 
+    /* word-wrap: break-word; */
+}
+
 
 .status {
     background: #dcdcdc;

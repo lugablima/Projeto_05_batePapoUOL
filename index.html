@@ -15,10 +15,10 @@
 <body>
     <div class="top">
         <img src="./images/logo.svg" alt="Logo do Bate Papo da UOL"/>
-        <ion-icon name="people-sharp"></ion-icon>
+        <ion-icon name="people-sharp" onclick="abrirMenuLateral()"></ion-icon>
     </div>
     <div class="content">
-        <div class="box status">
+        <!-- <div class="box status">
             <p class="text-message"><span class="color-gray">(09:21:45)</span> <span>João</span> entra na sala...</p>
         </div>
         <div class="box normal-message">
@@ -32,7 +32,7 @@
         </div>
         <div class="box status">
             <p class="text-message"><span class="color-gray">(09:22:58)</span> <span>Maria</span> sai da sala...</p>
-        </div>
+        </div> -->
     </div>
     <div class="bottom">
         <div>
@@ -42,36 +42,41 @@
         <ion-icon name="paper-plane-outline" onclick="enviarMensagem()"></ion-icon>
     </div>
     <div class="opcoes ocultar">
-        <div class="tela-preta"></div>
+        <div class="tela-preta" onclick="fecharMenuLateral()"></div>
         <div class="menu-lateral">
             <h6>Escolha um contato
                 para enviar mensagem:</h6>
             <div class="contatos">
-                <div class="contato selecionar">
+                <div class="contato selecionar" onclick="selecionarContato(this)">
                     <ion-icon name="people-sharp" class="ion-icon-todos"></ion-icon>
                     <p class="texto-menu-lateral">Todos</p>
                     <img src="./images/check.svg" alt="Selecionado"/>
                 </div>
-                <div class="contato">
-                    <ion-icon name="person-circle-sharp" class="ion-icon-usuario"></ion-icon>
-                    <p class="texto-menu-lateral">João</p>
-                    <img src="./images/check.svg" alt="Selecionado"/>
-                </div>
-                <div class="contato">
-                    <ion-icon name="person-circle-sharp" class="ion-icon-usuario"></ion-icon>
-                    <p class="texto-menu-lateral">Maria</p>
+                <div class="contatos-dinamico">
+                <!-- <div class="contato" onclick="selecionarContato(this)">
+                        <ion-icon name="person-circle-sharp" class="ion-icon-usuario"></ion-icon>
+                        <p class="texto-menu-lateral">João</p>
+                        <img src="./images/check.svg" alt="Selecionado"/>
+                    </div>
+                    <div class="contato" onclick="selecionarContato(this)">
+                        <ion-icon name="person-circle-sharp" class="ion-icon-usuario"></ion-icon>
+                        <p class="texto-menu-lateral">Maria</p>
+                        <img src="./images/check.svg" alt="Selecionado"/>
+                    </div> -->
                 </div>
             </div>
             <h6 class="texto-visibilidade">Escolha a visibilidade:</h6>
-            <div class="contato">
-                <ion-icon name="lock-open" class="ion-icon-visibilidade"></ion-icon>
-                <p class="texto-menu-lateral">Público</p>
-                <img src="./images/check.svg" alt="Selecionado"/>
-            </div>
-            <div class="contato">
-                <ion-icon name="lock-closed" class="ion-icon-visibilidade"></ion-icon>
-                <p class="texto-menu-lateral">Reservadamente</p>
-                <img src="./images/check.svg" alt="Selecionado"/>
+            <div class="visibilidades">
+                <div class="visibilidade selecionar" onclick="selecionarVisibilidade(this)">
+                    <ion-icon name="lock-open" class="ion-icon-visibilidade"></ion-icon>
+                    <p class="texto-menu-lateral">Público</p>
+                    <img src="./images/check.svg" alt="Selecionado"/>
+                </div>
+                <div class="visibilidade" onclick="selecionarVisibilidade(this)">
+                    <ion-icon name="lock-closed" class="ion-icon-visibilidade"></ion-icon>
+                    <p class="texto-menu-lateral">Reservadamente</p>
+                    <img src="./images/check.svg" alt="Selecionado"/>
+                </div>
             </div>
         </div>
     </div>
@@ -79,9 +84,11 @@
         <img src="./images/logo2.svg" alt="Logo do Bate Papo da UOL"/>
         <input type="text" placeholder="Digite seu nome"/>
         <button>Entrar</button>
+        <img src="./images/loading-icon.gif" alt="Carregando" class="ocultar"/>
+        <p class="ocultar">Entrando...</p>
     </div>
     <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <!-- <script src="./scripts/script.js"></script> -->
+    <script src="./scripts/script.js"></script>
 </body>
 </html>

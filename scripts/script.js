@@ -1,7 +1,12 @@
 let nameUser;
 let mensagens = [];
-// let idManterConexao;
-// let idBuscarMensagens;
+let contatoSelecionado;
+let visibilidadeSelecionada;
+const elementoInputMensagem = document.querySelector("input");
+let idManterConexao;
+let idBuscarMensagens;
+let idBuscarParticipantes;
+let arrayParticipantes = [];
 entrarNaSala();
 
 function entrarNaSala() {
@@ -27,6 +32,10 @@ function tratarSucessoEnviarNome (response) {
         console.log("o nome foi enviado com sucesso!");
         idManterConexao = setInterval(manterConexao, 4000);
         idBuscarMensagens = setInterval(buscarMensagens, 3000);
+        idBuscarParticipantes = setInterval(buscarParticipantes, 10000);
+        alterarDestinatarioEVisibilidade();
+        buscarMensagens();
+        buscarParticipantes();
     }
 }
 
@@ -50,9 +59,11 @@ function manterConexao() {
     })
     promise.catch(function () {
         alert("Sua conexão caiu e você não está mais online! Se quiser continuar no chat, entre novamente.");
-        // clearInterval(idManterConexao);
-        // clearInterval(idBuscarMensagens);
-        window.location.reload();
+        clearInterval(idManterConexao);
+        clearInterval(idBuscarMensagens);
+        clearInterval(idBuscarParticipantes);
+        entrarNaSala();
+        //window.location.reload();
     })
 }
 
@@ -85,6 +96,59 @@ function renderizarMensagens(arrayMensagens) {
     }
     rolarProFinal();
 }
+
+function buscarParticipantes() {
+    const promise = axios.get("https://mock-api.driven.com.br/api/v6/uol/participants");
+    promise.then(sucessoBuscarPartcipantes);
+    promise.catch(erroBuscarParticipantes);
+}
+
+function sucessoBuscarPartcipantes(response) {
+    if(response.status === 200) {
+        arrayParticipantes = response.data;
+        renderizarParticipantes(arrayParticipantes);
+    }
+}
+
+function erroBuscarParticipantes(error) {
+    console.log("Não consegui buscar os participantes");
+}
+
+function renderizarParticipantes(participantes) {
+    const elemento = document.querySelector(".contatos-dinamico");
+    // elemento.innerHTML = `
+    //     <div class="contato" onclick="selecionarContato(this)">
+    //         <ion-icon name="people-sharp" class="ion-icon-todos"></ion-icon>
+    //         <p class="texto-menu-lateral">Todos</p>
+    //         <img src="./images/check.svg" alt="Selecionado"/>
+    //     </div>
+    // `;
+    elemento.innerHTML = "";
+
+    for(let j = 0; j < participantes.length; j++) {
+        const nomeUsuarioDiferente = participantes[j].name !== nameUser;
+        const contatoDiferenteDoSelecionado = participantes[j].name !== contatoSelecionado;
+
+        if(nomeUsuarioDiferente && contatoDiferenteDoSelecionado) {
+            elemento.innerHTML += `
+            <div class="contato" onclick="selecionarContato(this)">
+                <ion-icon name="person-circle-sharp" class="ion-icon-usuario"></ion-icon>
+                <p class="texto-menu-lateral">${participantes[j].name}</p>
+                <img src="./images/check.svg" alt="Selecionado"/>
+            </div>
+            `;
+        } else if(nomeUsuarioDiferente && !contatoDiferenteDoSelecionado) {
+            elemento.innerHTML += `
+            <div class="contato selecionar" onclick="selecionarContato(this)">
+                <ion-icon name="person-circle-sharp" class="ion-icon-usuario"></ion-icon>
+                <p class="texto-menu-lateral">${participantes[j].name}</p>
+                <img src="./images/check.svg" alt="Selecionado"/>
+            </div>
+            `;
+        }
+    }
+    alterarDestinatarioEVisibilidade();
+} 
 
 function mensagemStatus(objetoMensagem) {
     const elemento = document.querySelector(".content");
@@ -127,24 +191,93 @@ function rolarProFinal() {
 }
 
 function enviarMensagem() {
-    const elemento = document.querySelector("input");
+    const mensagemNaoVazia = elementoInputMensagem.value !== "";
+    let tipoMensagem;
 
-    const mensagem = {
-        from: nameUser,
-        to: "Todos", //lembrar de alterar depois
-        text: elemento.value,
-        type: "message" //"private_message" para o bônus
-    } 
-
-    const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages", mensagem)
-    promise.then(function () {
-        elemento.value = "";
-        buscarMensagens();
-    });
-    promise.catch(function () {
-        alert("Você não está mais na sala, portanto, a página será recarregada!");
-        elemento.value = "";
-        window.location.reload();
-    })
+    if(visibilidadeSelecionada === "público") {
+        tipoMensagem = "message";
+    } else {
+        tipoMensagem = "private_message";
+    }
+    
+    if(mensagemNaoVazia) {
+        const mensagem = {
+            from: nameUser,
+            to: contatoSelecionado, 
+            text: elementoInputMensagem.value,
+            type: tipoMensagem //"private_message" para o bônus
+        } 
+    
+        const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages", mensagem)
+        promise.then(function () {
+            elementoInputMensagem.value = "";
+            buscarMensagens();
+        });
+        promise.catch(function () {
+            alert("Você não está mais na sala, portanto, a página será recarregada!");
+            elementoInputMensagem.value = "";
+            window.location.reload();
+        })
+    }
 }
 
+elementoInputMensagem.addEventListener('keydown', (event) => {
+    const keyName = event.key;
+    if(keyName === "Enter") {
+        enviarMensagem();
+    }
+});
+
+function abrirMenuLateral() {
+    const elemento = document.querySelector(".opcoes");
+    elemento.classList.remove("ocultar");
+}
+
+function fecharMenuLateral() {
+    const elemento = document.querySelector(".opcoes");
+    elemento.classList.add("ocultar");
+}
+
+function selecionarContato(el) {
+    const contatos = document.querySelector(".contatos");
+    const selecionado = contatos.querySelector(".selecionar");
+    
+    if(selecionado) {
+        selecionado.classList.remove("selecionar");
+    }
+
+    el.classList.add("selecionar");    
+    alterarDestinatarioEVisibilidade();
+}
+
+function selecionarVisibilidade(el) {
+    const visibilidades = document.querySelector(".visibilidades");
+    const selecionado = visibilidades.querySelector(".selecionar");
+
+    if(selecionado) {
+        selecionado.classList.remove("selecionar");
+    }
+
+    el.classList.add("selecionar");
+    alterarDestinatarioEVisibilidade();
+}
+
+function alterarDestinatarioEVisibilidade() {
+    const destinatarioInput = document.querySelector(".bottom h6");
+    const contatos = document.querySelector(".contatos");
+    const contato = contatos.querySelector(".selecionar");
+
+    if(contato !== null) {
+        contatoSelecionado = contato.querySelector("p").innerHTML;    
+    } else {
+        contatoSelecionado = "Todos";
+        document.querySelector(".ion-icon-todos").parentNode.classList.add("selecionar");
+    }
+
+    const visibilidades = document.querySelector(".visibilidades");
+    const visibilidade = visibilidades.querySelector(".selecionar");
+    visibilidadeSelecionada = visibilidade.querySelector("p").innerHTML;
+    visibilidadeSelecionada = visibilidadeSelecionada.toLowerCase();
+
+    destinatarioInput.innerHTML = `Enviando para ${contatoSelecionado} (${visibilidadeSelecionada})`;
+}
