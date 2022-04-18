@@ -240,7 +240,7 @@ input:focus {
     background: #ffffff;
 }
 
-.tela-de-entrada > img {
+.logo-tela-de-entrada {
     width: 130px;
     height: 92px;
     /*max-width: 34.67%;*/
@@ -279,6 +279,12 @@ input:focus {
     background: #e7e7e7;
     padding: 0;
 
+}
+
+.img-carregando {
+    width: 130px;
+    height: 100px;
+    margin-bottom: 25px;
 }
 
 .box {

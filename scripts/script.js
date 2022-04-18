@@ -7,15 +7,20 @@ let idManterConexao;
 let idBuscarMensagens;
 let idBuscarParticipantes;
 let arrayParticipantes = [];
-entrarNaSala();
+const telaDeEntrada = document.querySelector(".tela-de-entrada");
+const inputEntrada = document.querySelector(".tela-de-entrada > input");
+const buttonEntrada = document.querySelector(".tela-de-entrada > button"); 
+const imgEntrada = document.querySelector(".img-carregando");
+const textEntrada = document.querySelector(".tela-de-entrada > p");
+//entrarNaSala();
 
 function entrarNaSala() {
-    nameUser = prompt("Qual é o seu nome?");
+    //nameUser = prompt("Qual é o seu nome?");
 
-    while (nameUser === "") {
-        alert("Entrada inválida! Digite um nome.");
-        nameUser = prompt("Qual é o seu nome?");
-    }
+    // while (nameUser === "") {
+    //     alert("Entrada inválida! Digite um nome.");
+    //     nameUser = prompt("Qual é o seu nome?");
+    // }
     
     const name = {
         name: nameUser
@@ -30,6 +35,12 @@ function entrarNaSala() {
 function tratarSucessoEnviarNome (response) {
     if (response.status === 200) {
         console.log("o nome foi enviado com sucesso!");
+        telaDeEntrada.classList.add("ocultar");        
+        inputEntrada.classList.remove("ocultar");
+        buttonEntrada.classList.remove("ocultar");
+        imgEntrada.classList.add("ocultar");
+        textEntrada.classList.add("ocultar");
+
         idManterConexao = setInterval(manterConexao, 4000);
         idBuscarMensagens = setInterval(buscarMensagens, 3000);
         idBuscarParticipantes = setInterval(buscarParticipantes, 10000);
@@ -40,11 +51,17 @@ function tratarSucessoEnviarNome (response) {
 }
 
 function tratarErroEnviarNome(error) {
-    //console.log(error);
+    //console.log(error.response);
+
     if(error.response.status === 400) {
         alert(`Já existe um(a) usuário(a) online com o nome ${nameUser}! Digite outro nome.`);
+        imgEntrada.classList.add("ocultar");
+        textEntrada.classList.add("ocultar");
+        inputEntrada.classList.remove("ocultar");
+        buttonEntrada.classList.remove("ocultar");
+
         // window.location.reload();
-        entrarNaSala();
+        // entrarNaSala();
     }
 }
 
@@ -59,10 +76,11 @@ function manterConexao() {
     })
     promise.catch(function () {
         alert("Sua conexão caiu e você não está mais online! Se quiser continuar no chat, entre novamente.");
+        telaDeEntrada.classList.remove("ocultar");
         clearInterval(idManterConexao);
         clearInterval(idBuscarMensagens);
         clearInterval(idBuscarParticipantes);
-        entrarNaSala();
+        //entrarNaSala();
         //window.location.reload();
     })
 }
@@ -105,6 +123,7 @@ function buscarParticipantes() {
 
 function sucessoBuscarPartcipantes(response) {
     if(response.status === 200) {
+        console.log("consegui buscar participantes!");
         arrayParticipantes = response.data;
         renderizarParticipantes(arrayParticipantes);
     }
@@ -281,3 +300,26 @@ function alterarDestinatarioEVisibilidade() {
 
     destinatarioInput.innerHTML = `Enviando para ${contatoSelecionado} (${visibilidadeSelecionada})`;
 }
+
+function carregarEntradaNaSala() {
+
+    nameUser = inputEntrada.value;
+
+    if(nameUser === "") {
+        alert("Entrada inválida! Digite um nome.");
+    } else {
+        inputEntrada.classList.add("ocultar");
+        buttonEntrada.classList.add("ocultar");
+        imgEntrada.classList.remove("ocultar");
+        textEntrada.classList.remove("ocultar");
+        inputEntrada.value = "";
+        entrarNaSala();
+    }
+}
+
+inputEntrada.addEventListener('keydown', (event) => {
+    const keyName = event.key;
+    if(keyName === "Enter") {
+        carregarEntradaNaSala();
+    }
+});
