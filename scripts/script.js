@@ -2,39 +2,31 @@ let nameUser;
 let mensagens = [];
 let contatoSelecionado;
 let visibilidadeSelecionada;
-const elementoInputMensagem = document.querySelector("input");
 let idManterConexao;
 let idBuscarMensagens;
 let idBuscarParticipantes;
 let arrayParticipantes = [];
+const elementoInputMensagem = document.querySelector("input");
 const telaDeEntrada = document.querySelector(".tela-de-entrada");
 const inputEntrada = document.querySelector(".tela-de-entrada > input");
 const buttonEntrada = document.querySelector(".tela-de-entrada > button"); 
 const imgEntrada = document.querySelector(".img-carregando");
 const textEntrada = document.querySelector(".tela-de-entrada > p");
-//entrarNaSala();
 
 function entrarNaSala() {
-    //nameUser = prompt("Qual é o seu nome?");
-
-    // while (nameUser === "") {
-    //     alert("Entrada inválida! Digite um nome.");
-    //     nameUser = prompt("Qual é o seu nome?");
-    // }
     
     const name = {
         name: nameUser
     }
 
     const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/participants", name);
-    //console.log("mandei");
     promise.then(tratarSucessoEnviarNome);
     promise.catch(tratarErroEnviarNome);
 }
 
 function tratarSucessoEnviarNome (response) {
+    
     if (response.status === 200) {
-        console.log("o nome foi enviado com sucesso!");
         telaDeEntrada.classList.add("ocultar");        
         inputEntrada.classList.remove("ocultar");
         buttonEntrada.classList.remove("ocultar");
@@ -51,55 +43,45 @@ function tratarSucessoEnviarNome (response) {
 }
 
 function tratarErroEnviarNome(error) {
-    //console.log(error.response);
-
+    
     if(error.response.status === 400) {
         alert(`Já existe um(a) usuário(a) online com o nome ${nameUser}! Digite outro nome.`);
         imgEntrada.classList.add("ocultar");
         textEntrada.classList.add("ocultar");
         inputEntrada.classList.remove("ocultar");
         buttonEntrada.classList.remove("ocultar");
-
-        // window.location.reload();
-        // entrarNaSala();
     }
 }
 
 function manterConexao() {
+    
     const name = {
         name: nameUser
     }
 
     const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/status", name);
-    promise.then(function () {
-        console.log("consegui manter a conexão!");
-    })
-    promise.catch(function () {
-        alert("Sua conexão caiu e você não está mais online! Se quiser continuar no chat, entre novamente.");
-        telaDeEntrada.classList.remove("ocultar");
-        clearInterval(idManterConexao);
-        clearInterval(idBuscarMensagens);
-        clearInterval(idBuscarParticipantes);
-        //entrarNaSala();
-        //window.location.reload();
-    })
+    promise.catch(erroManterConexao);
+}
+
+function erroManterConexao() {
+    alert("Sua conexão caiu e você não está mais online! Se quiser continuar no chat, entre novamente.");
+    telaDeEntrada.classList.remove("ocultar");
+    clearInterval(idManterConexao);
+    clearInterval(idBuscarMensagens);
+    clearInterval(idBuscarParticipantes);
 }
 
 function buscarMensagens() {
     const promise = axios.get("https://mock-api.driven.com.br/api/v6/uol/messages");
-    //console.log("consegui requisitar pra pegar as mensagens!");
     promise.then(armazenarMensagens);
 }
 
 function armazenarMensagens(response) {
-    console.log("entrei em armazenarMensagens!");
-    //console.log(response);
     mensagens = response.data;
     renderizarMensagens(mensagens);
 }
 
 function renderizarMensagens(arrayMensagens) {
-    console.log("entrei em renderizarMensagens");
     const elemento = document.querySelector(".content");
     elemento.innerHTML = "";
 
@@ -118,30 +100,18 @@ function renderizarMensagens(arrayMensagens) {
 function buscarParticipantes() {
     const promise = axios.get("https://mock-api.driven.com.br/api/v6/uol/participants");
     promise.then(sucessoBuscarPartcipantes);
-    promise.catch(erroBuscarParticipantes);
 }
 
 function sucessoBuscarPartcipantes(response) {
+
     if(response.status === 200) {
-        console.log("consegui buscar participantes!");
         arrayParticipantes = response.data;
         renderizarParticipantes(arrayParticipantes);
     }
 }
 
-function erroBuscarParticipantes(error) {
-    console.log("Não consegui buscar os participantes");
-}
-
 function renderizarParticipantes(participantes) {
     const elemento = document.querySelector(".contatos-dinamico");
-    // elemento.innerHTML = `
-    //     <div class="contato" onclick="selecionarContato(this)">
-    //         <ion-icon name="people-sharp" class="ion-icon-todos"></ion-icon>
-    //         <p class="texto-menu-lateral">Todos</p>
-    //         <img src="./images/check.svg" alt="Selecionado"/>
-    //     </div>
-    // `;
     elemento.innerHTML = "";
 
     for(let j = 0; j < participantes.length; j++) {
@@ -192,6 +162,7 @@ function mensagemPublica(objetoMensagem) {
 }
 
 function mensagemParticular(objetoMensagem) {
+
     if((objetoMensagem.to === nameUser) || (objetoMensagem.to === "Todos") || (objetoMensagem.from === nameUser)) {
         const elemento = document.querySelector(".content");
         const templateParticular = `
@@ -220,28 +191,34 @@ function enviarMensagem() {
     }
     
     if(mensagemNaoVazia) {
+
         const mensagem = {
             from: nameUser,
             to: contatoSelecionado, 
             text: elementoInputMensagem.value,
-            type: tipoMensagem //"private_message" para o bônus
+            type: tipoMensagem 
         } 
     
-        const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages", mensagem)
-        promise.then(function () {
-            elementoInputMensagem.value = "";
-            buscarMensagens();
-        });
-        promise.catch(function () {
-            alert("Você não está mais na sala, portanto, a página será recarregada!");
-            elementoInputMensagem.value = "";
-            window.location.reload();
-        })
+        const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages", mensagem);
+        promise.then(sucessoEnviarMensagem);
+        promise.catch(erroEnviarMensagem);
     }
 }
 
+function sucessoEnviarMensagem() {
+    elementoInputMensagem.value = "";
+    buscarMensagens();
+}
+
+function erroEnviarMensagem() {
+    alert("Você não está mais na sala, portanto, a página será recarregada!");
+    elementoInputMensagem.value = "";
+    window.location.reload();
+} 
+
 elementoInputMensagem.addEventListener('keydown', (event) => {
     const keyName = event.key;
+
     if(keyName === "Enter") {
         enviarMensagem();
     }
@@ -319,6 +296,7 @@ function carregarEntradaNaSala() {
 
 inputEntrada.addEventListener('keydown', (event) => {
     const keyName = event.key;
+
     if(keyName === "Enter") {
         carregarEntradaNaSala();
     }

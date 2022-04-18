@@ -46,13 +46,12 @@ body {
     z-index: 1;
     display: flex;
     justify-content: space-between;
-    /* align-items: center; */
     background: #ffffff;
 }
 
 .bottom > div {
     width: calc(100% - 75px);
-    margin: 15px 0 1px 17px;
+    margin: 15px 0 0 17px;
 }
 
 .bottom input{
@@ -61,7 +60,6 @@ body {
     height: 30px;
     border: none;
     padding: 0;
-    /* margin: 25px 0 25px 17px; */
 }
 
 .bottom input::-webkit-input-placeholder { /* Edge */
@@ -69,7 +67,7 @@ body {
     font-style: italic;
     font-weight: 400;
     font-size: 18px;
-    line-height: 21px;
+    line-height: 19px;
     color: #000000;
 }
 
@@ -78,7 +76,7 @@ body {
     font-style: italic;
     font-weight: 400;
     font-size: 18px;
-    line-height: 21px;
+    line-height: 19px;
     color: #000000;
 }
 
@@ -87,7 +85,7 @@ body {
     font-style: italic;
     font-weight: 400;
     font-size: 18px;
-    line-height: 21px;
+    line-height: 19px;
     color: #000000;
 }
 
@@ -98,8 +96,10 @@ input:focus {
 .bottom h6 {
     font-weight: 300;
     font-size: 14px;
-    line-height: 21px;
+    line-height: 19px;
     color: #000000;
+    line-break: normal;
+    word-break: break-all; 
 }
 
 .bottom > ion-icon {
@@ -111,7 +111,6 @@ input:focus {
     width: 100%;
     height: 100%;
     margin: 106px 0 84px;
-    /* background-color: red; apagar */
 }
 
 .opcoes {
@@ -125,14 +124,12 @@ input:focus {
 }
 
 .tela-preta {
-    /* width: calc(100% - 259px); */
     width: 30.92%;
     height: 100%;
     background: rgba(0, 0, 0, 0.6);
 }
 
 .menu-lateral {
-    /* width: calc(100% - 116px); */
     width: 69.08%;
     height: 100%;
     background: #ffffff;
@@ -141,7 +138,6 @@ input:focus {
 }
 
 .menu-lateral h6:first-child {
-    /* width: 66%; */
     max-width: 170.973px;
     text-align: center;
     font-weight: 700;
@@ -163,7 +159,6 @@ input:focus {
 
 .contatos, .contatos-dinamico {
     width: 100%;
-    /* background: red; apagar */
 }
 
 .visibilidades {
@@ -178,10 +173,10 @@ input:focus {
     align-items: center;
     margin-bottom: 1px;
     position: relative;
-    /* font-weight: 400;
-    font-size: 16px;
-    line-height: 19px;
-    color: #000000; */
+}
+
+.margin-bottom {
+    margin-bottom: 10px;
 }
 
 .ion-icon-todos {
@@ -207,6 +202,8 @@ input:focus {
     font-size: 16px;
     line-height: 19px;
     color: #000000;
+    line-break: normal;
+    word-break: break-all; 
 }
 
 .contato > img {
@@ -243,7 +240,6 @@ input:focus {
 .logo-tela-de-entrada {
     width: 130px;
     height: 92px;
-    /*max-width: 34.67%;*/
     margin: 72px 0 94px;
 }
 
@@ -292,16 +288,13 @@ input:focus {
     border-radius: 2px;
     padding: 13px 9px 13px 8px;
     margin-bottom: 4px;
-    /*overflow: hidden;*/
 }
 
 .box > p {
     width: 100%;
     line-break: normal;
     word-break: break-all; 
-    /* word-wrap: break-word; */
 }
-
 
 .status {
     background: #dcdcdc;
@@ -316,7 +309,6 @@ input:focus {
 }
 
 .text-message {
-    /* font-family: 'Roboto', sans-serif; */
     font-weight: 400;
     font-size: 14px;
     line-height: 20px;
